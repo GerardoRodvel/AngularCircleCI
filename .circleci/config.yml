@@ -1,28 +1,24 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/project-name
+    working_directory: ~/AngularCircleCI
     docker:
       - image: circleci/node:10-browsers
-    steps:        
+    steps:
       - checkout
       - restore_cache:
           key: AngularCircleCI-{{ .Branch }}-{{ checksum "package.json" }}
-            - run:
-                command: npm install
-            - save_cache:
-                key: v1-dependencies-{{ checksum "package-lock.json" }}
-                paths:
-                    - "node_modules"
-            # Lint the source code
-            - run:
-                name: Linting
-                command: npm run lint
-            # Test the source code
-            - run:
-                name: Testing
-                command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-            # End to End test
-            - run:
-                name: End to End Test
-                command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+      - run: npm install
+      - save_cache:
+          key: AngularCircleCI-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - "node_modules"
+       # Lint the source code
+      - run:
+          name: Linting
+          command: npm run lint
+    # Test the source code
+      - run:
+         name: Testing
+         command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+    
